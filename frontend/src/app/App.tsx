@@ -1,36 +1,38 @@
-import React, { useState } from "react";
-import "./App.css";
+import React, { useState, useEffect } from "react";
+import "../App.css";
+import { getValidMoves, BOARD_SIZE, DIRECTIONS } from "../function/gameLogics";
 
-const BOARD_SIZE = 8;
-type Cell = 0 | 1 | 2; // 0: 空, 1: 黒, 2: 白
+import type { Cell } from "../function/gameLogics";
 
-//探索用
-const DIRECTIONS = [
-  [-1, -1],
-  [-1, 0],
-  [-1, 1],
-  [0, -1],
-  [0, 1],
-  [1, -1],
-  [1, 0],
-  [1, 1],
-];
 //ゲーム処理
 const App: React.FC = () => {
   //盤面初期化
   const initialBoard: Cell[][] = Array.from({ length: BOARD_SIZE }, (_, row) =>
     Array.from({ length: BOARD_SIZE }, (_, col) => {
+      // 1:黒 2:白
       if ((row === 3 && col === 3) || (row === 4 && col === 4)) return 2;
       if ((row === 3 && col === 4) || (row === 4 && col === 3)) return 1;
       return 0;
     })
   );
+
   //盤面保持
   const [board, setBoard] = useState<Cell[][]>(initialBoard);
+
   //現在のプレイヤー保持
   const [currentPlayer, setCurrentPlayer] = useState<Cell>(1);
 
-  // 有効な方向をチェックして石を裏返す
+  //合法手の管理
+  const [validMoves, setValidMoves] = useState<[number, number][]>([]);
+
+  //スキップボタンの状態管理
+  const [isSkip, setIsSkip] = useState(false);
+  //ゲーム状態
+  const [gameOver, setGameOver] = useState(false);
+  //勝敗状態
+  const [winner, setWinner] = useState<"白" | "黒" | "引き分け" | null>(null);
+
+  //有効な方向をチェックして石を裏返す関数
   const flipStones = (
     // 引数
     row: number,
@@ -100,27 +102,87 @@ const App: React.FC = () => {
       setBoard(newBoard);
       //ターン切り替え
       setCurrentPlayer(currentPlayer === 1 ? 2 : 1);
+      setIsSkip(false);
     }
   };
+
+  //スキップボタン押下時
+  const handleSkip = () => {
+    const nextplayer = currentPlayer === 1 ? 2 : 1;
+    setCurrentPlayer(nextplayer);
+  };
+
+  // 石の数を数える関数
+  const countStones = (board: Cell[][]) => {
+    let black = 0;
+    let white = 0;
+    for (let row = 0; row < BOARD_SIZE; row++) {
+      for (let col = 0; col < BOARD_SIZE; col++) {
+        if (board[row][col] == 1) black++;
+        if (board[row][col] == 2) white++;
+      }
+    }
+    return { black, white };
+  };
+
+  useEffect(() => {
+    const moves = getValidMoves(board, currentPlayer);
+    if (gameOver) return;
+    if (moves.length === 0) {
+      const nextPlayer = currentPlayer === 1 ? 2 : 1;
+      const nextMoves = getValidMoves(board, nextPlayer);
+
+      if (nextMoves.length > 0) {
+        setIsSkip(true);
+      } else {
+        // ゲーム終了処理（どちらも合法手なし）
+        const { black, white } = countStones(board);
+        setGameOver(true);
+        if (black > white) setWinner("黒");
+        else if (white > black) setWinner("白");
+        else setWinner("引き分け");
+      }
+
+      setValidMoves([]); // 現在のプレイヤーは合法手なし
+    } else {
+      setValidMoves(moves);
+    }
+  }, [board, currentPlayer]);
 
   return (
     <div className="container">
       <h1>React オセロ</h1>
+
       <div className="board">
         {board.map((rowData, rowIndex) =>
-          rowData.map((cell, colIndex) => (
-            <div
-              key={`${rowIndex}-${colIndex}`}
-              className="cell"
-              onClick={() => handleClick(rowIndex, colIndex)}
-            >
-              {cell === 1 && <div className="stone black" />}
-              {cell === 2 && <div className="stone white" />}
-            </div>
-          ))
+          rowData.map((cell, colIndex) => {
+            const isValidMove = validMoves.some(
+              ([r, c]) => r === rowIndex && c === colIndex
+            );
+
+            return (
+              <div
+                key={`${rowIndex}-${colIndex}`}
+                className={`cell ${isValidMove ? "valid" : ""}`}
+                onClick={() => handleClick(rowIndex, colIndex)}
+              >
+                {cell === 1 && <div className="stone black" />}
+                {cell === 2 && <div className="stone white" />}
+                {isValidMove && <div className="hint" />}
+              </div>
+            );
+          })
         )}
       </div>
+
       <p>現在のプレイヤー: {currentPlayer === 1 ? "黒" : "白"}</p>
+      {isSkip && (
+        <div style={{ marginTop: "10px" }}>
+          <button className="skipButton" onClick={handleSkip}>
+            スキップ
+          </button>
+        </div>
+      )}
     </div>
   );
 };

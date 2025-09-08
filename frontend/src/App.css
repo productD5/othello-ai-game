@@ -1,16 +1,9 @@
-/* src/App.css */
-.container {
-  text-align: center;
-  padding: 20px;
-}
-
 .board {
   display: grid;
   grid-template-columns: repeat(8, 50px);
   grid-template-rows: repeat(8, 50px);
   gap: 2px;
   margin: 20px auto;
-  width: fit-content;
 }
 
 .cell {
@@ -20,6 +13,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
   cursor: pointer;
 }
 
@@ -36,4 +30,17 @@
 .white {
   background-color: white;
   border: 1px solid #333;
+}
+
+.hint {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  position: absolute;
+}
+
+.skipButon {
+  background-color: black;
+  color: white;
 }
