@@ -176,11 +176,27 @@ const App: React.FC = () => {
       </div>
 
       <p>現在のプレイヤー: {currentPlayer === 1 ? "黒" : "白"}</p>
-      {isSkip && (
+      {isSkip && !gameOver && (
         <div style={{ marginTop: "10px" }}>
           <button className="skipButton" onClick={handleSkip}>
             スキップ
           </button>
+        </div>
+      )}
+
+      {gameOver && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>ゲーム終了！</h2>
+            <p>勝者: {winner}</p>
+            <p>
+              黒: {countStones(board).black} 個 白: {countStones(board).white}{" "}
+              個
+            </p>
+            <button onClick={() => window.location.reload()}>
+              もう一度遊ぶ
+            </button>
+          </div>
         </div>
       )}
     </div>
