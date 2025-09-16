@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../App.css";
 import { getValidMoves, BOARD_SIZE, DIRECTIONS } from "../function/gameLogics";
-
+import { requestAIMove } from "../function/api";
 import type { Cell } from "../function/gameLogics";
 
 //ゲーム処理
@@ -124,18 +124,27 @@ const App: React.FC = () => {
     }
     return { black, white };
   };
-
   useEffect(() => {
-    const moves = getValidMoves(board, currentPlayer);
     if (gameOver) return;
+
+    const moves = getValidMoves(board, currentPlayer);
+
     if (moves.length === 0) {
       const nextPlayer = currentPlayer === 1 ? 2 : 1;
       const nextMoves = getValidMoves(board, nextPlayer);
 
       if (nextMoves.length > 0) {
-        setIsSkip(true);
+        if (currentPlayer === 2) {
+          // --- AIのスキップ処理 ---
+          console.log("AIは合法手がないためスキップします");
+          setCurrentPlayer(nextPlayer); // 自動で人間にターンを戻す
+          setIsSkip(true);
+        } else {
+          // --- 人間のスキップ（ボタンで操作するケース） ---
+          setIsSkip(true);
+        }
       } else {
-        // ゲーム終了処理（どちらも合法手なし）
+        // --- ゲーム終了処理 ---
         const { black, white } = countStones(board);
         setGameOver(true);
         if (black > white) setWinner("黒");
@@ -146,8 +155,35 @@ const App: React.FC = () => {
       setValidMoves([]); // 現在のプレイヤーは合法手なし
     } else {
       setValidMoves(moves);
+
+      // --- AIの番なら手を打たせる ---
+      if (currentPlayer === 2) {
+        (async () => {
+          try {
+            const move = await requestAIMove(board, currentPlayer);
+            console.log(move);
+            if (move) {
+              const { row, col } = move;
+              const newBoard = flipStones(row, col, board, 2);
+              if (newBoard !== board) {
+                setBoard(newBoard);
+                setCurrentPlayer(1); // 黒に戻す
+                setIsSkip(false);
+              }
+            } else {
+              // AIが合法手なし (サーバーが null 返したケース)
+              console.log("AIはスキップしました");
+              setCurrentPlayer(1);
+              setIsSkip(true);
+            }
+          } catch (err) {
+            console.error("AIリクエスト失敗:", err);
+            setCurrentPlayer(1);
+          }
+        })();
+      }
     }
-  }, [board, currentPlayer]);
+  }, [board, currentPlayer, gameOver]);
 
   return (
     <div className="container">

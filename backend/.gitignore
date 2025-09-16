@@ -5,5 +5,9 @@ backend/student-venv/
 backend/student-venv/
 =======
 #venv
+<<<<<<< HEAD
 .student-venv/
 >>>>>>> cfba961 (9/12のコミット)
+=======
+/student-venv
+>>>>>>> 101886c (9/16 完成)

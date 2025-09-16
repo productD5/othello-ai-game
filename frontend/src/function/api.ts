@@ -1,19 +1,19 @@
-// AIに手を依頼する関数
+// src/function/api.ts
 import axios from "axios";
-import type { Cell } from "./gameLogics";
 
-const requestAIMove = async (board: Cell[][]): Promise<[number, number] | null> => {
+export async function requestAIMove(board: number[][], player: number) {
   try {
     const response = await axios.post("http://localhost:5000/ai-move", {
-      board, // 盤面だけ送信
+      player,
+      board,
     });
-
-    // サーバーから { move: [row, col] } が返ってくる想定
-    return response.data.move as [number, number];
+    return response.data;
   } catch (error) {
-    console.error("AIリクエスト失敗:", error);
-    return null;
+    if (axios.isAxiosError(error)) {
+      console.error("AIリクエスト失敗:", error.response?.data || error.message);
+    } else {
+      console.error("AIリクエスト失敗:", error);
+    }
+    throw error;
   }
-};
-
-export default requestAIMove;
+}
