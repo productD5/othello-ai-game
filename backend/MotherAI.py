@@ -1,5 +1,14 @@
 # game_logic.py
 
+
+def normalize_board(board):
+    """
+    0,1,2で表現された盤面を " ", "B", "W" に変換
+    """
+    mapping = {0: " ", 1: "B", 2: "W"}
+    return [[mapping[cell] for cell in row] for row in board]
+
+
 def get_opponent(player):
     """
     指定されたプレイヤーの対戦相手を返します。
