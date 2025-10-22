@@ -1,6 +1,6 @@
 # game_logic.py
-
-
+import time
+import random
 def normalize_board(board):
     """
     0,1,2で表現された盤面を " ", "B", "W" に変換
@@ -10,6 +10,7 @@ def normalize_board(board):
 
 
 def get_opponent(player):
+    
     """
     指定されたプレイヤーの対戦相手を返します。
     """
@@ -23,6 +24,7 @@ def is_valid_move(board, row, col, player):
     """
     指定された座標 (row, col) が、指定されたプレイヤーにとって合法手であるか判定します。
     """
+
     if not (0 <= row < 8 and 0 <= col < 8) or board[row][col] != ' ':
         return False
         
@@ -106,6 +108,8 @@ def find_best_move(board, player):
     """
     現在の盤面で最も良い手を探索し、その座標を返します。
     """
+    time.sleep(random.randint(1,2))
+    
     valid_moves = get_valid_moves(board, player)
 
     if not valid_moves:

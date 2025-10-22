@@ -3,6 +3,7 @@ import "../App.css";
 import { getValidMoves, BOARD_SIZE, DIRECTIONS } from "../function/gameLogics";
 import { requestAIMove } from "../function/api";
 import type { Cell } from "../function/gameLogics";
+import GameHeader from "../component/heder";
 
 //ゲーム処理
 const App: React.FC = () => {
@@ -16,6 +17,10 @@ const App: React.FC = () => {
     })
   );
 
+  //AIカウント
+  const [AICont, setAICont] = useState<number>(0);
+  //人間カウント
+  const [HuCont, setHuCont] = useState<number>(0);
   //盤面保持
   const [board, setBoard] = useState<Cell[][]>(initialBoard);
 
@@ -27,10 +32,15 @@ const App: React.FC = () => {
 
   //スキップボタンの状態管理
   const [isSkip, setIsSkip] = useState(false);
-  //ゲーム状態
+  //ゲーム状態(モーダル)
   const [gameOver, setGameOver] = useState(false);
   //勝敗状態
-  const [winner, setWinner] = useState<"白" | "黒" | "引き分け" | null>(null);
+  const [winner, setWinner] = useState<"AI" | "あなた" | "引き分け" | null>(
+    null
+  );
+
+  //AIスキップ表示
+  const [AISkip, setAISkip] = useState(false);
 
   //有効な方向をチェックして石を裏返す関数
   const flipStones = (
@@ -95,7 +105,8 @@ const App: React.FC = () => {
   // 盤面をクリックしたときの処理
   const handleClick = (row: number, col: number) => {
     if (board[row][col] !== 0) return;
-
+    if (currentPlayer === 2) return;
+    setAISkip(false);
     const newBoard = flipStones(row, col, board, currentPlayer);
     //boardの内容が変化していたら更新
     if (newBoard !== board) {
@@ -125,6 +136,8 @@ const App: React.FC = () => {
     return { black, white };
   };
   useEffect(() => {
+    localStorage.setItem("AICont", AICont.toString());
+    localStorage.setItem("HuCont", HuCont.toString());
     if (gameOver) return;
 
     const moves = getValidMoves(board, currentPlayer);
@@ -136,9 +149,9 @@ const App: React.FC = () => {
       if (nextMoves.length > 0) {
         if (currentPlayer === 2) {
           // --- AIのスキップ処理 ---
-          console.log("AIは合法手がないためスキップします");
+          console.log("AIスキップ");
+          setAISkip(true);
           setCurrentPlayer(nextPlayer); // 自動で人間にターンを戻す
-          setIsSkip(true);
         } else {
           // --- 人間のスキップ（ボタンで操作するケース） ---
           setIsSkip(true);
@@ -147,9 +160,12 @@ const App: React.FC = () => {
         // --- ゲーム終了処理 ---
         const { black, white } = countStones(board);
         setGameOver(true);
-        if (black > white) setWinner("黒");
-        else if (white > black) setWinner("白");
-        else setWinner("引き分け");
+        if (black > white) {
+          setWinner("あなた");
+        } else if (white > black) {
+          setWinner("AI");
+          setAICont((prev) => prev + 1);
+        } else setWinner("引き分け");
       }
 
       setValidMoves([]); // 現在のプレイヤーは合法手なし
@@ -172,9 +188,8 @@ const App: React.FC = () => {
               }
             } else {
               // AIが合法手なし (サーバーが null 返したケース)
-              console.log("AIはスキップしました");
               setCurrentPlayer(1);
-              setIsSkip(true);
+              setAISkip(true);
             }
           } catch (err) {
             console.error("AIリクエスト失敗:", err);
@@ -186,45 +201,60 @@ const App: React.FC = () => {
   }, [board, currentPlayer, gameOver]);
 
   return (
-    <div className="container">
-      <h1>React オセロ</h1>
+    <div className="root">
+      <GameHeader />
+      <div className="creater">
+        <h2>制作</h2>
+        <div className="uchida">
+          <h4>UI/UX:</h4>
+          <h3>3-A 内田大悟</h3>
+        </div>
+        <div className="mattun">
+          <h3>最強AI作成: </h3>
+          <h3> 3-A 松本 爽</h3>
+        </div>
+      </div>
+      <div className="container">
+        <h3>現在のプレイヤー: {currentPlayer === 1 ? "黒" : "白"}</h3>
 
-      <div className="board">
-        {board.map((rowData, rowIndex) =>
-          rowData.map((cell, colIndex) => {
-            const isValidMove = validMoves.some(
-              ([r, c]) => r === rowIndex && c === colIndex
-            );
+        {AISkip && <h2>AIがスキップしました</h2>}
 
-            return (
-              <div
-                key={`${rowIndex}-${colIndex}`}
-                className={`cell ${isValidMove ? "valid" : ""}`}
-                onClick={() => handleClick(rowIndex, colIndex)}
-              >
-                {cell === 1 && <div className="stone black" />}
-                {cell === 2 && <div className="stone white" />}
-                {isValidMove && <div className="hint" />}
-              </div>
-            );
-          })
+        <div className="board">
+          {board.map((rowData, rowIndex) =>
+            rowData.map((cell, colIndex) => {
+              const isValidMove = validMoves.some(
+                ([r, c]) => r === rowIndex && c === colIndex
+              );
+
+              return (
+                <div
+                  key={`${rowIndex}-${colIndex}`}
+                  className={`cell ${isValidMove ? "valid" : ""}`}
+                  onClick={() => handleClick(rowIndex, colIndex)}
+                >
+                  {cell === 1 && <div className="stone black" />}
+                  {cell === 2 && <div className="stone white" />}
+                  {isValidMove && <div className="hint" />}
+                </div>
+              );
+            })
+          )}
+        </div>
+        {isSkip && !gameOver && (
+          <div style={{ marginTop: "10px" }}>
+            <h2>打つ場所がありません</h2>
+            <button className="skipButton" onClick={handleSkip}>
+              スキップ
+            </button>
+          </div>
         )}
       </div>
-
-      <p>現在のプレイヤー: {currentPlayer === 1 ? "黒" : "白"}</p>
-      {isSkip && !gameOver && (
-        <div style={{ marginTop: "10px" }}>
-          <button className="skipButton" onClick={handleSkip}>
-            スキップ
-          </button>
-        </div>
-      )}
 
       {gameOver && (
         <div className="modal-overlay">
           <div className="modal">
             <h2>ゲーム終了！</h2>
-            <p>勝者: {winner}</p>
+            <h2>勝者: {winner}</h2>
             <p>
               黒: {countStones(board).black} 個 白: {countStones(board).white}{" "}
               個

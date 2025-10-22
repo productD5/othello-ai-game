@@ -6,8 +6,13 @@ backend/student-venv/
 =======
 #venv
 <<<<<<< HEAD
+<<<<<<< HEAD
 .student-venv/
 >>>>>>> cfba961 (9/12のコミット)
 =======
 /student-venv
 >>>>>>> 101886c (9/16 完成)
+=======
+/student-venv
+/__pycache__
+>>>>>>> 9f5eab9 (これにて完成 10/22)

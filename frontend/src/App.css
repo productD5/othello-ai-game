@@ -1,5 +1,8 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 9f5eab9 (これにて完成 10/22)
 .uchida{
   display: flex;
   flex-direction: unset;
@@ -15,8 +18,11 @@
   margin:20px;
 }
 
+<<<<<<< HEAD
 =======
 >>>>>>> cfba961 (9/12のコミット)
+=======
+>>>>>>> 9f5eab9 (これにて完成 10/22)
 .skipButton {
   margin-top: 10px;
   padding: 8px 16px;
@@ -72,12 +78,16 @@
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 9f5eab9 (これにて完成 10/22)
 .root{
   position : fixed;
   top: 0%;
   
 }
 
+<<<<<<< HEAD
 .container {
   position: fixed;
   top: 50%;
@@ -93,7 +103,17 @@
 =======
 >>>>>>> c422caa (9/8日のコミット)
 =======
+=======
+>>>>>>> 9f5eab9 (これにて完成 10/22)
 .container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
 }
 
@@ -102,6 +122,7 @@
   display: grid;
   grid-template-columns: repeat(8, 50px);
   grid-template-rows: repeat(8, 50px);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
   margin: 20px 0;
@@ -113,6 +134,9 @@
 >>>>>>> c422caa (9/8日のコミット)
 =======
   margin: 20px auto;
+=======
+  margin: 20px 0;
+>>>>>>> 9f5eab9 (これにて完成 10/22)
   border: 2px solid #333;
   background-color: green;
 >>>>>>> cfba961 (9/12のコミット)

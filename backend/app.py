@@ -31,10 +31,6 @@ def get_best_move():
         else:
             return jsonify({"error": "Invalid player value"}), 400
 
-        print("=== DEBUG ===")
-        print("Board:", board)
-        print("Player:", player)
-
         # CPUの最適な手を計算
         best_move = find_best_move(board, player)
 
