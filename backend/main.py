@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 9c71c14 (余計なファイルの削除 10/23)
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
@@ -14,6 +17,7 @@ def get_ai_move():
 
 if __name__ == "__main__":
     app.run(debug=True)
+<<<<<<< HEAD
 =======
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -31,3 +35,5 @@ def get_ai_move():
 if __name__ == "__main__":
     app.run(debug=True)
 >>>>>>> 7184f97 (feat:フロントのみ実装)
+=======
+>>>>>>> 9c71c14 (余計なファイルの削除 10/23)
