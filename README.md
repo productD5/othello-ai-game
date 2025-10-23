@@ -1,1 +1,1 @@
-#CPU対戦のオセロゲームです。React+Flaskで作成
+## CPU対戦のオセロゲームです。React+Flaskで作成
