@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 # Python 仮想環境
 backend/student-venv/
 backend/student-venv/
 backend/student-venv/
+=======
+#venv
+.student-venv/
+>>>>>>> cfba961 (9/12のコミット)

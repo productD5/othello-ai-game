@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 .uchida{
   display: flex;
   flex-direction: unset;
@@ -14,6 +15,8 @@
   margin:20px;
 }
 
+=======
+>>>>>>> cfba961 (9/12のコミット)
 .skipButton {
   margin-top: 10px;
   padding: 8px 16px;
@@ -68,6 +71,7 @@
   background-color: #256d46;
 }
 
+<<<<<<< HEAD
 .root{
   position : fixed;
   top: 0%;
@@ -88,10 +92,17 @@
 
 =======
 >>>>>>> c422caa (9/8日のコミット)
+=======
+.container {
+  text-align: center;
+}
+
+>>>>>>> cfba961 (9/12のコミット)
 .board {
   display: grid;
   grid-template-columns: repeat(8, 50px);
   grid-template-rows: repeat(8, 50px);
+<<<<<<< HEAD
 <<<<<<< HEAD
   margin: 20px 0;
   border: 2px solid #333;
@@ -100,6 +111,11 @@
   gap: 2px;
   margin: 20px auto;
 >>>>>>> c422caa (9/8日のコミット)
+=======
+  margin: 20px auto;
+  border: 2px solid #333;
+  background-color: green;
+>>>>>>> cfba961 (9/12のコミット)
 }
 
 .cell {
@@ -111,9 +127,12 @@
   align-items: center;
   position: relative;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   cursor: pointer;
 >>>>>>> c422caa (9/8日のコミット)
+=======
+>>>>>>> cfba961 (9/12のコミット)
 }
 
 .stone {
@@ -132,6 +151,7 @@
 
 .valid {
   background-color: rgba(255, 255, 0, 0.3); /* 打てるマスを黄色っぽく */
+<<<<<<< HEAD
 }
 
 .hint {
@@ -140,17 +160,14 @@
   border-radius: 50%;
   background-color: yellow;
   position: absolute;
+=======
+>>>>>>> cfba961 (9/12のコミット)
 }
 
 .hint {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: yellow;
   position: absolute;
-}
-
-.skipButon {
-  background-color: black;
-  color: white;
 }
