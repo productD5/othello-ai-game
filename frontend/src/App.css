@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .uchida{
   display: flex;
   flex-direction: unset;
@@ -85,13 +86,20 @@
   text-align: center;
 }
 
+=======
+>>>>>>> c422caa (9/8日のコミット)
 .board {
   display: grid;
   grid-template-columns: repeat(8, 50px);
   grid-template-rows: repeat(8, 50px);
+<<<<<<< HEAD
   margin: 20px 0;
   border: 2px solid #333;
   background-color: green;
+=======
+  gap: 2px;
+  margin: 20px auto;
+>>>>>>> c422caa (9/8日のコミット)
 }
 
 .cell {
@@ -102,6 +110,10 @@
   justify-content: center;
   align-items: center;
   position: relative;
+<<<<<<< HEAD
+=======
+  cursor: pointer;
+>>>>>>> c422caa (9/8日のコミット)
 }
 
 .stone {
@@ -128,4 +140,17 @@
   border-radius: 50%;
   background-color: yellow;
   position: absolute;
+}
+
+.hint {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  position: absolute;
+}
+
+.skipButon {
+  background-color: black;
+  color: white;
 }
