@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Python 仮想環境
 backend/student-venv/
 backend/student-venv/
@@ -20,3 +21,8 @@ backend/student-venv/
 =======
 ~/student-venv
 >>>>>>> 06cbd3c (gitignoreファイルを制作 10/23)
+=======
+# Python 仮想環境
+backend/student-venv/
+backend/student-venv/
+>>>>>>> 129a4a8 (Ignore virtual environment)
